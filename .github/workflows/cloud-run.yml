@@ -14,6 +14,8 @@ jobs:
   build-and-deploy:
     name: Setup, Build, and Deploy
     runs-on: ubuntu-latest
+    environment:
+      name: Production
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -46,3 +48,13 @@ jobs:
           --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
           --platform "managed" \
           --quiet
+      
+      - name: Get Deployment URL
+        id: get-url
+        run: |
+          DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
+          echo "::set-output name=url::$DEPLOYMENT_URL"
+
+      - name: Display Deployment URL
+        run: |
+          echo "Deployment URL: ${{ steps.get-url.outputs.url }}"
