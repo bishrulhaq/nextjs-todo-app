@@ -1,13 +1,27 @@
 version: '3'
 services:
-  app:
+  app-dev:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     ports:
       - 3000:3000
     volumes:
       - .:/usr/app
     environment:
       - PORT=3000
-    command: npm run dev
+      - NODE_ENV=production
