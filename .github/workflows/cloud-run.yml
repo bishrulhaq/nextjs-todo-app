@@ -48,13 +48,12 @@ jobs:
           --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
           --platform "managed" \
           --quiet
-      
-      - name: Get Deployment URL
-        id: get-url
+
+      - name: Create Environment File with Deployment URL
         run: |
           DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
-          echo "::set-output name=url::$DEPLOYMENT_URL"
+          echo "URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
 
       - name: Display Deployment URL
         run: |
-          echo "Deployment URL: ${{ steps.get-url.outputs.url }}"
+          echo "Deployment URL: ${{ env.URL }}"
