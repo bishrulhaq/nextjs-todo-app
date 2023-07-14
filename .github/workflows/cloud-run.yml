@@ -35,12 +35,12 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "API_KEY=${{ secrets.GOOGLE_ID }}" >> .env
-          echo "API_KEY=${{ secrets.GOOGLE_SECRET }}" >> .env
-          echo "API_KEY=${{ secrets.MONGODB_URI }}" >> .env
-          echo "API_KEY=${{ secrets.SECRET }}" >> .env
-          echo "SECRET_KEY=${{ secrets.APP_URL }}" >> .env
-          echo "SECRET_KEY=${{ secrets.NEXTAUTH_URL }}" >> .env
+          echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> .env
+          echo "GOOGLE_SECRET=${{ secrets.GOOGLE_SECRET }}" >> .env
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
+          echo "SECRET=${{ secrets.SECRET }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
 
       - name: Build and tag the docker image
         run: |-
