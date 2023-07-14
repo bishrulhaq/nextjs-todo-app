@@ -1,14 +1,32 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import "@testing-library/jest-dom";
-import TodoApp from "../component/ToDo";
+import { useSession } from "next-auth/react";
+import TodoApp from "../pages/index";
+
+jest.mock("next-auth/react", () => ({
+  useSession: jest.fn()
+}));
+
+const mockSessionData = {
+  data: {
+    user: {
+      name: 'Bishrul Haq',
+      email: 'bishrul@test.com'
+    }
+  }
+};
+
+beforeEach(() => {
+  useSession.mockReturnValue(mockSessionData);
+});
 
 describe('ToDo component', () => {
   test('renders the component', () => {
-    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
+    render(<TodoApp />);
   });
 
   test('adds a new todo', () => {
-    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
+    render(<TodoApp />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
@@ -26,7 +44,7 @@ describe('ToDo component', () => {
   });
 
   test('deletes a todo', () => {
-    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
+    render(<TodoApp />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
@@ -50,7 +68,7 @@ describe('ToDo component', () => {
   });
 
   test('marks a todo as completed', () => {
-    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
+    render(<TodoApp />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
