@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
+    depends_on:
+      - database
     volumes:
       - .:/usr/app
       - /usr/app/node_modules
@@ -13,6 +15,8 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+    networks:
+      - todo-network
 
   app-prod:
     build:
@@ -25,3 +29,25 @@ services:
     environment:
       - PORT=3000
       - NODE_ENV=production
+    networks:
+      - todo-network
+
+  database:
+    image: mongo
+    container_name: todo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: ToDoDatabase
+    volumes:
+      - mongo_backup:/data/db
+    networks:
+      - todo-network
+
+volumes:
+  mongo_backup: {}
+
+
+networks:
+  todo-network:
+    driver: bridge

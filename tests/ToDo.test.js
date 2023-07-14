@@ -1,14 +1,14 @@
-import TodoApp from "../pages/index";
+import { render, screen, fireEvent } from '@testing-library/react';
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import TodoApp from "../component/ToDo";
 
-describe('TodoApp', () => {
-  test('renders the TodoApp component', () => {
-    render(<TodoApp />);
+describe('ToDo component', () => {
+  test('renders the component', () => {
+    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
   });
 
   test('adds a new todo', () => {
-    render(<TodoApp />);
+    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
@@ -26,7 +26,7 @@ describe('TodoApp', () => {
   });
 
   test('deletes a todo', () => {
-    render(<TodoApp />);
+    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
@@ -50,7 +50,7 @@ describe('TodoApp', () => {
   });
 
   test('marks a todo as completed', () => {
-    render(<TodoApp />);
+    render(<TodoApp session={{ user: { name: 'Bishrul Haq', email: 'bishrul@test.com' } }} />);
 
     const inputElement = screen.getByPlaceholderText('Add a new todo');
     const addButtonElement = screen.getByText('Add Task');
@@ -68,4 +68,5 @@ describe('TodoApp', () => {
     // Click the todo item to mark it as completed
     fireEvent.click(todoItemElement);
   });
+
 });

@@ -33,6 +33,15 @@ jobs:
       - name: Authorize Docker push
         run: gcloud auth configure-docker
 
+      - name: Set environment variables
+        run: |
+          echo "API_KEY=${{ secrets.GOOGLE_ID }}" >> .env
+          echo "API_KEY=${{ secrets.GOOGLE_SECRET }}" >> .env
+          echo "API_KEY=${{ secrets.MONGODB_URI }}" >> .env
+          echo "API_KEY=${{ secrets.SECRET }}" >> .env
+          echo "SECRET_KEY=${{ secrets.APP_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.NEXTAUTH_URL }}" >> .env
+
       - name: Build and tag the docker image
         run: |-
           docker build -f Dockerfile.prod . --tag gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
