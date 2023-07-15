@@ -34,14 +34,15 @@ jobs:
       - name: Authorize Docker push
         run: gcloud auth configure-docker
 
-      - name: Set environment variables
-        run: |
-          echo "API_KEY=${{ secrets.GOOGLE_ID }}" >> .env
-          echo "API_KEY=${{ secrets.GOOGLE_SECRET }}" >> .env
-          echo "API_KEY=${{ secrets.MONGODB_URI }}" >> .env
-          echo "API_KEY=${{ secrets.SECRET }}" >> .env
-          echo "SECRET_KEY=${{ secrets.APP_URL }}" >> .env
-          echo "SECRET_KEY=${{ secrets.NEXTAUTH_URL }}" >> .env
+      - name: Generate .env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
+          envkey_GOOGLE_SECRET: ${{ secrets.GOOGLE_SECRET }}
+          envkey_MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          envkey_SECRET: ${{ secrets.SECRET }}
+          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
       - name: Build and tag the docker image
         run: |-
