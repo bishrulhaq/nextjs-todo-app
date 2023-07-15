@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: ${{ steps.deploy-url.outputs }}
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,16 +52,15 @@ jobs:
           docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
 
       - name: Deploy
-        id: deploy
         run: |-
           gcloud run deploy $REPO_NAME \
           --region $REGION \
           --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
           --platform "managed" \
-          --quiet
+          --quiet'
 
       - name: Deployment URL
-        id: deploy-url
-        run: |-
-          gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)'
-
+        id: deploy
+        run: |
+          DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
+          echo "::set-output name=url::$DEPLOYMENT_URL"
