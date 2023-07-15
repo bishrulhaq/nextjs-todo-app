@@ -11,12 +11,9 @@ env:
   REPO_NAME: nextjs-todo-app
 
 jobs:
-  build-and-deploy:
-    name: Setup, Build, and Deploy
+  setup-and-build:
+    name: Setup and Build
     runs-on: ubuntu-latest
-    environment:
-      name: Production
-      url: ${{ steps.create-url.outputs.url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,6 +48,14 @@ jobs:
         run: |-
           docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: setup-and-build
+    environment:
+      name: Production
+      url: ${{ steps.create-url.outputs.url }}
+      
+    steps:
       - name: Deploy
         run: |-
           gcloud run deploy $REPO_NAME \
@@ -63,4 +68,4 @@ jobs:
         id: create-url
         run: |
           DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
-          echo "::set-output name=url::$DEPLOYMENT_URL"
+          echo "URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
