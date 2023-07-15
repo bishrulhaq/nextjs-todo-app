@@ -53,7 +53,6 @@ jobs:
     needs: setup-and-build
     environment:
       name: Production
-      url: ${{ steps.create-url.outputs.url }}
       
     steps:
       - name: Deploy
