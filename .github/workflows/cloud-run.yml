@@ -64,3 +64,7 @@ jobs:
         run: |
           DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
           echo "::set-output name=url::$DEPLOYMENT_URL"
+
+      - name: Store deployment URL as workflow output
+        id: store-deployment-url
+        run: echo "::set-output name=deployment-url::${{ needs.deploy.outputs.url }}"
