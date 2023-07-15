@@ -68,4 +68,3 @@ jobs:
         id: create-url
         run: |
           DEPLOYMENT_URL=$(gcloud run services describe $REPO_NAME --region $REGION --format 'value(status.url)')
-          echo "URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
